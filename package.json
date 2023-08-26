@@ -1,0 +1,46 @@
+{
+  "name": "node-webscrap",
+  "version": "1.0.0",
+  "description": "Webscrap website's metadata easily",
+  "main": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc"
+  },
+  "files": [
+    "dist/*",
+    "README.md"
+  ],
+  "exports": {
+    "types": "./dist/index.d.ts",
+    "default": "./dist/index.js"
+  },
+  "keywords": [
+    "webscrap",
+    "scraping",
+    "website",
+    "scraper",
+    "extract",
+    "metadata",
+    "scraper"
+  ],
+  "author": "NoxFly",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "directory": "https://github.com/NoxFly/node-webscrap",
+    "url": "git+https://github.com/NoxFly/node-webscrap.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NoxFly/node-webscrap/issues"
+  },
+  "homepage": "https://github.com/NoxFly/node-webscrap",
+  "readme": "https://github.com/NoxFly/node-webscrap/#readme",
+  "dependencies": {
+    "@types/got": "^9.6.12",
+    "got": "^13.0.0",
+    "install": "^0.13.0",
+    "node-fetch": "^3.3.2",
+    "npm": "^9.8.1"
+  }
+}
