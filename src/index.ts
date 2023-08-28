@@ -147,3 +147,5 @@ export async function webscrap(url: string): Promise<IWebsiteInfos> {
 
     return infos;
 }
+
+webscrap('https://dorian.thivolle.net').then(console.log).catch(console.error);

@@ -5,6 +5,8 @@
   "main": "dist/index.js",
   "type": "module",
   "scripts": {
+    "dev": "ts-node-esm src/index.ts",
+    "start": "ts-node dist/index.js",
     "build": "tsc"
   },
   "files": [
@@ -38,9 +40,6 @@
   "readme": "https://github.com/NoxFly/node-webscrap/#readme",
   "dependencies": {
     "@types/got": "^9.6.12",
-    "got": "^13.0.0",
-    "install": "^0.13.0",
-    "node-fetch": "^3.3.2",
-    "npm": "^9.8.1"
+    "got": "^13.0.0"
   }
 }
