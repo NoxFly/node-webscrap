@@ -39,12 +39,13 @@ Use it to retrieve all metadata from a website.
 
 ## Usage
 
-Available in JS and TS.
-
-CommonJS is not supported for now, only ESM.
+Available in JS and TS, for both ESM and CJS.
 
 ```ts
+// for ESM :
 import { webscrap } from 'node-webscrap';
+// for CJS :
+const { webscrap } = require('node-webscrap');
 
 const data = await webscrap('https://google.fr');
 

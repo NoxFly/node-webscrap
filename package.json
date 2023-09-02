@@ -1,44 +1,50 @@
 {
-  "name": "node-webscrap",
-  "version": "1.1.1",
-  "description": "Webscrap website's metadata easily",
-  "main": "dist/index.js",
-  "type": "module",
-  "scripts": {
-    "dev": "ts-node-esm src/index.ts",
-    "start": "ts-node dist/index.js",
-    "build": "tsc"
-  },
-  "files": [
-    "dist/*",
-    "README.md"
-  ],
-  "exports": {
-    "types": "./dist/index.d.ts",
-    "default": "./dist/index.js"
-  },
-  "keywords": [
-    "webscrap",
-    "scraping",
-    "website",
-    "scraper",
-    "extract",
-    "metadata",
-    "scraper"
-  ],
-  "author": "NoxFly",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "directory": "https://github.com/NoxFly/node-webscrap",
-    "url": "git+https://github.com/NoxFly/node-webscrap.git"
-  },
-  "bugs": {
-    "url": "https://github.com/NoxFly/node-webscrap/issues"
-  },
-  "homepage": "https://github.com/NoxFly/node-webscrap",
-  "readme": "https://github.com/NoxFly/node-webscrap/#readme",
-  "devDependencies": {
-    "@types/node": "^20.5.8"
-  }
+    "name": "node-webscrap",
+    "version": "1.1.1",
+    "description": "Webscrap website's metadata easily",
+    "main": "dist/cjs/index.js",
+    "module": "dist/esm/index.js",
+    "types": "dist/types/index.d.ts",
+    "scripts": {
+        "compile": "tsc -b ./cjs.tsconfig.json ./esm.tsconfig.json ./types.tsconfig.json",
+        "build:clean": "rm -rf ./dist",
+        "build": "npm run build:clean && npm run compile && node ./scripts/fix-esm-package",
+        "prepublishOnly": "npm run build"
+    },
+    "files": [
+        "dist/*",
+        "README.md"
+    ],
+    "exports": {
+        ".": {
+            "types": "./dist/types/index.d.ts",
+            "require": "./dist/cjs/index.js",
+            "import": "./dist/esm/index.js",
+            "default": "./dist/esm/index.js"
+        }
+    },
+    "keywords": [
+        "webscrap",
+        "scraping",
+        "website",
+        "scraper",
+        "extract",
+        "metadata",
+        "scraper"
+    ],
+    "author": "NoxFly",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "directory": "https://github.com/NoxFly/node-webscrap",
+        "url": "git+https://github.com/NoxFly/node-webscrap.git"
+    },
+    "bugs": {
+        "url": "https://github.com/NoxFly/node-webscrap/issues"
+    },
+    "homepage": "https://github.com/NoxFly/node-webscrap",
+    "readme": "https://github.com/NoxFly/node-webscrap/#readme",
+    "devDependencies": {
+        "@types/node": "^20.5.8"
+    }
 }
