@@ -38,8 +38,7 @@
   },
   "homepage": "https://github.com/NoxFly/node-webscrap",
   "readme": "https://github.com/NoxFly/node-webscrap/#readme",
-  "dependencies": {
-    "@types/got": "^9.6.12",
-    "got": "^13.0.0"
+  "devDependencies": {
+    "@types/node": "^20.5.8"
   }
 }

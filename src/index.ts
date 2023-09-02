@@ -1,4 +1,5 @@
-import got from "got";
+import * as http from 'http';
+import * as https from 'https';
 
 
 export interface IWebsiteMetadata {
@@ -84,6 +85,66 @@ const translations: Record<string, (object: IWebsiteInfos, value: string) => voi
     'title': (o, v) => o.metadata.title = v,
 };
 
+type RequestResponse = {
+    statusCode: number;
+    statusMessage: string;
+    headers: http.IncomingHttpHeaders;
+    data: any;
+};
+
+
+const request = async (url: string): Promise<RequestResponse> => {
+	return new Promise((resolve, reject) => {
+		const module = (url.startsWith('https'))? https : http;
+
+		const match = url.match(/^https?:\/\/((?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6})\b([-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$/);
+
+        if(!match) {
+            reject('Given URL is not well formed.');
+            return;
+        }
+
+        const [_, hostname, path] = match;
+
+		const options: http.RequestOptions = {
+			hostname,
+			path,
+			headers: {
+				'Content-Type': 'text/html',
+				'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0',
+				'Connection': 'keep-alive',
+				'Referrer': hostname,
+				'Accept': 'text/html'
+			}
+		};
+
+		module.get(options, res => {
+			let data = '';
+
+			const headers = res.headers;
+			const statusCode = res.statusCode || 0;
+			const statusMessage = res.statusMessage || '';
+
+			res.on('data', chunk => {
+				data += chunk;
+			});
+
+			res.on('end', () => {
+				resolve({
+					statusCode,
+					statusMessage,
+					headers,
+					data
+				});
+			});
+
+			res.on('error', e => {
+				reject(e);
+			});
+		});
+	});
+};
+
 
 export async function webscrap(url: string): Promise<IWebsiteInfos> {
     const infos: IWebsiteInfos = {
@@ -94,29 +155,18 @@ export async function webscrap(url: string): Promise<IWebsiteInfos> {
         }
     };
 
-    const baseUrl = url.replace(/^(http(s)?:\/\/([\w]+\.){1,2}\w{2,6}\/).*/, '$1');
-
-    const response = await got(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'text/html',
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:109.0) Gecko/20100101 Firefox/114.0',
-            'Connection': 'keep-alive',
-            'Referrer': baseUrl,
-            'Accept': 'text/html'
-        }
-    });
+    const response = await request(url);
 
     if(response.statusCode >= 400) {
         throw new Error(`Failed to fetch resource at ${url} (status ${response.statusCode} : ${response.statusMessage})`);
     }
 
-    const { body } = response;
+    const { data } = response;
 
-    const headTagIndexStart = body.indexOf('<head');
-    const headTagIndexEnd = body.indexOf('</head>');
+    const headTagIndexStart = data.indexOf('<head');
+    const headTagIndexEnd = data.indexOf('</head>');
 
-    const headContent = body.slice(headTagIndexStart, headTagIndexEnd);
+    const headContent = data.slice(headTagIndexStart, headTagIndexEnd);
 
     const metaTags = [...headContent.matchAll(/<meta\s+property=["'](og|twitter):(.+?)["']\s*content=["'](.*?)["']\s*\/?>/g)]
         .map(match => ([ match[1] + ':' + match[2], match[3] ]))
@@ -133,7 +183,7 @@ export async function webscrap(url: string): Promise<IWebsiteInfos> {
     
     const favicons = headContent
         .match(/<link(.*?)href=["'](.*?(png|svg|ico|jpg|jpeg|gif))["'](.*?)\/?>/g)
-        ?.map(m => m.match(/href=["'](.*?)["']/)?.[1] || '');
+        ?.map((m: string) => m.match(/href=["'](.*?)["']/)?.[1] || '');
 
     if(favicons) {
         infos.metadata.favicons = favicons;
@@ -147,5 +197,3 @@ export async function webscrap(url: string): Promise<IWebsiteInfos> {
 
     return infos;
 }
-
-webscrap('https://dorian.thivolle.net').then(console.log).catch(console.error);

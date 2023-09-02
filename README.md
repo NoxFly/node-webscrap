@@ -6,7 +6,7 @@ Use it to retrieve all metadata from a website.
 
 Available in JS and TS.
 
-CommonJS is not supported, only ESM.
+CommonJS is not supported for now, only ESM.
 
 ```ts
 import { webscrap } from 'node-webscrap';
@@ -66,7 +66,7 @@ interface IWebsiteInfos {
 }
 ```
 
-For fetching resources, it uses [got](https://www.npmjs.com/package/got) instead of [node-fetch](https://www.npmjs.com/package/node-fetch) and [Axios](https://www.npmjs.com/package/axios), because this package requires less dependencies (then is lighter), and is well maintained.
+For fetching resources, it uses does not use any dependency. It uses the core http/https modules from NodeJS, so this package is lightweight.
 
 
 # Bug report and contribution
