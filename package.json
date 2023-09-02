@@ -1,6 +1,6 @@
 {
   "name": "node-webscrap",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Webscrap website's metadata easily",
   "main": "dist/index.js",
   "type": "module",
